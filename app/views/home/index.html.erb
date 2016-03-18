@@ -1,0 +1,9 @@
+<div>
+	<h1>Beesplit</h1>
+	<h2>Ensuring fair split on your bee's workloads :)</h2>
+	<ol>
+		<% Bee.all.each do |row| %>
+			<li><%= row["name"] %></li>
+		<% end %>
+	</ol>
+</div>

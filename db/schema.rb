@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160318173926) do
+ActiveRecord::Schema.define(version: 20160318174518) do
 
   create_table "all_orders", force: :cascade do |t|
     t.datetime "created_at",           null: false
@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(version: 20160318173926) do
     t.integer  "store_id",   limit: 4,   null: false
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.integer  "order_id",   limit: 4
   end
 
   create_table "orders", force: :cascade do |t|

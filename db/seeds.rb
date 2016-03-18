@@ -6,12 +6,19 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+3.times do
+  AllStore.create!(
+    address: Faker::Address.street_address
+  )
+end
+
 4.times do
   Bee.create!(
       name: Faker::Name.name,
       contact_no: Faker::PhoneNumber.cell_phone,
       email: Faker::Internet.email,
-      status: 3
+      status: 3,
+      all_store_id: rand(1..3)
   )
 end
 
@@ -44,8 +51,3 @@ end
   )
 end
 
-3.times do
-  AllStore.create!(
-    address: Faker::Address.street_address
-  )
-end

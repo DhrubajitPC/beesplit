@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+gem 'tzinfo-data'
+
 # Use SCSS for stylesheets
 gem 'sassc-rails'
 # gem to help with css

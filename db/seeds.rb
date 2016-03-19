@@ -46,7 +46,8 @@ end
   Order.create!(
     quantity: rand(1..10),
     item_id: rand(1..10),
-    all_order_id: rand(1..4)
+    all_order_id: rand(1..4),
+    delivery_time: Faker::Time.forward(2, :morning)
   )
 end
 

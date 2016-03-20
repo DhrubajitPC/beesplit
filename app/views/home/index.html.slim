@@ -9,7 +9,7 @@ table
 	tbody
 		-Bee.all.each do |row|
 			tr
-				td.name = row.name 
+				td.name = link_to row.name, row
 				td.active = row.status
 				td.address = AllStore.find(row.all_store_id).address
 

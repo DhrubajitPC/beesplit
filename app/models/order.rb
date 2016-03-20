@@ -1,4 +1,4 @@
 class Order < ActiveRecord::Base
-  belongs_to :all_order
+  belongs_to :bee
   has_many :items
 end

@@ -13,6 +13,7 @@
 
 ActiveRecord::Schema.define(version: 20160320121242) do
 
+
   create_table "all_stores", force: :cascade do |t|
     t.string   "address",    limit: 255
     t.datetime "created_at",             null: false

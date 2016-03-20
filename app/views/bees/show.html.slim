@@ -8,5 +8,20 @@ table
       th Category
   tbody
     tr
-      =
-      td
+      - @bee.orders.each do |order|
+        td = order.id
+        td
+          table
+            - order.items.each do |item|
+              tr
+                td = item.name
+        td
+          table
+            - order.items.each do |item|
+              tr
+                td = item.price
+        td
+          table
+            - order.items.each do |item|
+              tr
+                td = item.category

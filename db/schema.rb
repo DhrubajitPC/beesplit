@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160320120133) do
+ActiveRecord::Schema.define(version: 20160320121242) do
 
   create_table "all_stores", force: :cascade do |t|
     t.string   "address",    limit: 255
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 20160320120133) do
     t.string   "category",   limit: 255, null: false
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.integer  "order_id",   limit: 4
   end
 
   create_table "orders", force: :cascade do |t|
@@ -43,7 +44,6 @@ ActiveRecord::Schema.define(version: 20160320120133) do
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
     t.integer  "bee_id",        limit: 4
-    t.integer  "item_id",       limit: 4
     t.date     "delivery_time"
   end
 

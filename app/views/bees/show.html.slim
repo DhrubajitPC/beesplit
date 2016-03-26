@@ -7,8 +7,10 @@ table
       th Price
       th Category
   tbody
+
     - @bee.orders.each do |order|
       tr
+
         td = order.id
         td
           table

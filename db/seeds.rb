@@ -15,7 +15,7 @@ end
 4.times do
   Bee.create!(
       name: Faker::Name.name,
-      contact_no: Faker::PhoneNumber.cell_phone,
+      contact: Faker::PhoneNumber.cell_phone,
       email: Faker::Internet.email,
       status: rand(0..2),
       all_store_id: rand(1..2)
@@ -27,7 +27,6 @@ end
      name: Faker::Commerce.product_name,
      price: Faker::Commerce.price,
      category: Faker::Commerce.department(1),
-     order_id: rand(1..3)
   )
 end
 
@@ -42,8 +41,10 @@ end
 4.times do
   Order.create!(
     quantity: rand(1..9),
-    bee_id: rand(1..3),
-    delivery_time: Faker::Time.forward(2, :morning)
+    delivery_time: Faker::Time.forward(2, :morning),
+    item_id: rand(1..10),
+    bee_id: rand(1..4)
+
   )
 end
 

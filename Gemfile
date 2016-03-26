@@ -33,6 +33,11 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'faker'
 #display er diagram
 gem "rails-erd"
+#simple form
+gem "simple_form"
+# gem to help with css
+gem "bootstrap-sass"
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

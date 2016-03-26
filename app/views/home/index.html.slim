@@ -1,35 +1,17 @@
-h1 Beesplit
-h2 Ensuring fair split on your bee's workloads :)
-table
-	thead
-		tr
-			th Name
-			th Active
-			th Store Address
-	tbody
-		-Bee.all.each do |row|
-			tr
-				td.name = link_to row.name, row
-				td.active = row.status
-				td.address = AllStore.find(row.all_store_id).address
+.container
+  h1 Beesplit
+  h2 Ensuring fair split on your bee's workloads :)
+  table.table.table-striped
+    thead
+      tr
+        th Name
+        th Active
+        th Store Address
+    tbody
+      -Bee.all.each do |row|
+        tr
+          td = link_to row.name, row
+          td = row.status
+          td = AllStore.find(row.all_store_id).address
 
-h2 Order Form
-table
-	tr
-		td Address
-		td
-			input id="address"
-	tr
-		td Time
-		td
-			input type="time" id="time"
-	tr
-		td Item 1:
-		td
-			select id="item-1"
-				-Item.all.each do |row|
-					option value=row.id =row.name
-button Add Item
-button Remove Item
-br
-button type="submit" Submit Order
+  =link_to "make a new order", new_order_path

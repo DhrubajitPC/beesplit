@@ -11,49 +11,40 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160320121242) do
-
+ActiveRecord::Schema.define(version: 20160326154757) do
 
   create_table "all_stores", force: :cascade do |t|
-    t.string   "address",    limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.integer "store_id", limit: 4
+    t.string  "address",  limit: 255
   end
 
   create_table "bees", force: :cascade do |t|
-    t.string   "name",         limit: 255,             null: false
-    t.string   "contact_no",   limit: 255,             null: false
-    t.string   "email",        limit: 255,             null: false
-    t.integer  "ratings",      limit: 4,   default: 0
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
-    t.integer  "status",       limit: 4
-    t.integer  "all_store_id", limit: 4
+    t.integer "order_id",     limit: 4
+    t.string  "rating",       limit: 255
+    t.integer "status",       limit: 4
+    t.string  "name",         limit: 255
+    t.string  "email",        limit: 255
+    t.string  "contact",      limit: 255
+    t.integer "all_store_id", limit: 4
   end
 
   create_table "items", force: :cascade do |t|
-    t.string   "name",       limit: 255, null: false
-    t.string   "price",      limit: 255, null: false
-    t.string   "category",   limit: 255, null: false
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-    t.integer  "order_id",   limit: 4
+    t.string "name",     limit: 255
+    t.string "price",    limit: 255
+    t.string "category", limit: 255
   end
 
   create_table "orders", force: :cascade do |t|
-    t.integer  "quantity",      limit: 4, null: false
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.integer  "quantity",      limit: 4
+    t.integer  "item_id",       limit: 4
     t.integer  "bee_id",        limit: 4
-    t.date     "delivery_time"
+    t.datetime "delivery_time"
   end
 
   create_table "stores", force: :cascade do |t|
-    t.integer  "item_id",      limit: 4,                 null: false
-    t.integer  "all_store_id", limit: 4,                 null: false
-    t.string   "stock",        limit: 255, default: "0"
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.integer "item_id",      limit: 4
+    t.integer "all_store_id", limit: 4
+    t.integer "stock",        limit: 4
   end
 
 end

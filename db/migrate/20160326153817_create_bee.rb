@@ -8,6 +8,8 @@ class CreateBee < ActiveRecord::Migration
       t.string :email
       t.string :contact
       t.integer :all_store_id
+
+      t.timestamps null: false
     end
   end
 end

@@ -1,17 +1,27 @@
 .container
-  h1 Beesplit
-  h2 Ensuring fair split on your bee's workloads :)
-  table.table.table-striped
-    thead
-      tr
-        th Name
-        th Active
-        th Store Address
-    tbody
-      -Bee.all.each do |row|
-        tr
-          td = link_to row.name, row
-          td = row.status
-          td = AllStore.find(row.all_store_id).address
+  .row
+    .col-sm-6
+      h1 beesplit
+      h2 Ensuring fair split on your bee's workloads :)
+    .col-sm-6
+      .text-right
+        =link_to "MAKE A NEW ORDER", new_order_path, class:'button button1'
+      
+  .table
+    .tablefont
+      table.table.table-striped
+        thead
+          tr
+            th Name
+            th Active
+            th Store Address
+        tbody
+          -Bee.all.each do |row|
+            tr
+              td = link_to row.name, row
+              td = row.status
+              td = AllStore.find(row.all_store_id).address
 
-  =link_to "make a new order", new_order_path
+
+  
+  

@@ -1,0 +1,33 @@
+.container
+  .row
+    h1 = "#{@bee.name}'s Orders"
+  .table
+    .tablefont
+      table.table.table-striped
+        thead
+          tr
+            th Order Id
+            th Item
+            th Price
+            th Category
+        tbody
+
+          - @bee.orders.each do |order|
+            tr
+
+              td = order.id
+              td
+                table
+                  - Item.find(order.item_id) do |item|
+                    tr
+                      td = item.name
+              td
+                table
+                  - Item.find(order.item_id) do |item|
+                    tr
+                      td = item.price
+              td
+                table
+                  - Item.find(order.item_id) do |item|
+                    tr
+                      td = item.category

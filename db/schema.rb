@@ -41,6 +41,8 @@ ActiveRecord::Schema.define(version: 20160326193915) do
   end
 
   create_table "order_alls", force: :cascade do |t|
+		t.integer  "bee_id",        limit: 4
+		t.datetime "delivery_time"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -48,9 +50,7 @@ ActiveRecord::Schema.define(version: 20160326193915) do
   create_table "orders", force: :cascade do |t|
     t.integer  "quantity",      limit: 4
     t.integer  "item_id",       limit: 4
-    t.integer  "bee_id",        limit: 4
     t.integer  "order_all_id",  limit: 4
-    t.datetime "delivery_time"
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
   end

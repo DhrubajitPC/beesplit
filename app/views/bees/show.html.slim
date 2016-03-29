@@ -4,30 +4,30 @@
   .table
     .tablefont
       table.table.table-striped
-        thead
-          tr
-            th Order Id
-            th Item
-            th Price
-            th Category
-        tbody
+		thead
+		  tr
+			th Order Id
+			th Delivery Date
+			th Details
+		tbody
+		  - @bee.order_alls.each do |order_all|
+			tr
+			  td = order_all.id
+			  td = order_all.delivery_time
+			  td
+				  table.table.table-striped
+					thead
+					  tr
+						th Order Line Id
+						th Item
+						th Price
+						th Category
+					tbody
 
-          - @bee.orders.each do |order|
-            tr
+					  - order_all.orders.each do |order|
+						tr
 
-              td = order.id
-              td
-                table
-                  - Item.find(order.item_id) do |item|
-                    tr
-                      td = item.name
-              td
-                table
-                  - Item.find(order.item_id) do |item|
-                    tr
-                      td = item.price
-              td
-                table
-                  - Item.find(order.item_id) do |item|
-                    tr
-                      td = item.category
+						  td = order.id
+						  td = order.item.name
+						  td = order.item.price
+						  td = order.item.category

@@ -38,16 +38,17 @@ end
   )
 end
 
-8.times do
+22.times do
   Order.create!(
     quantity: rand(1..9),
-    delivery_time: Faker::Time.forward(2, :morning),
     item_id: rand(1..10),
-    bee_id: rand(1..4),
-    order_all_id: rand(1..4)
+    order_all_id: rand(1..8)
   )
 end
 
-3.times do
-  OrderAll.create!()
+8.times do
+  OrderAll.create!(
+		bee_id: rand(1..4),
+		delivery_time: Faker::Time.forward(2, :morning)
+	)
 end

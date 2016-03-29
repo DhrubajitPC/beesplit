@@ -11,6 +11,9 @@
     = form_for @order_all, url: orders_path do |f|
       = f.label "Delivery Time: "
       = f.date_field :delivery_time
+	  br
+	  = f.label "Delivery Address: "
+	  = f.text_field :address
       br
       = f.label "Select Items: "
 

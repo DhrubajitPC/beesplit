@@ -1,4 +1,5 @@
 class OrdersController < ApplicationController
+	include ApplicationHelper
 
   def new
     @order_all = OrderAll.new
@@ -20,6 +21,23 @@ class OrdersController < ApplicationController
 			end
 		end
 		
+		@freeBees = Bee.where(status: 1) #free
+		@min = 99999
+		@best_bee = nil
+		@freeBees.each do |bee|
+			@store = AllStore.find(bee.all_store_id)
+			@dist = levenshtein_distance(@store.address, @order_all.address)
+			if (@dist < @min)
+				@min = @dist
+				@best_bee = bee
+			end
+		end
+		
+		@order_all.bee_id = @best_bee.id
+		
+		puts @best_bee.name
+		puts @min
+		
     if @order_all.save
       flash[:notice] = "Sucessfully Added New Order!"
       redirect_to root_path
@@ -32,6 +50,6 @@ class OrdersController < ApplicationController
   private
 
   def order_all_params
-    params.require(:order_all).permit(:delivery_time, orders_attributes: [ :item_id, :quantity ])
+    params.require(:order_all).permit(:delivery_time, :address, orders_attributes: [ :item_id, :quantity ])
   end
 end

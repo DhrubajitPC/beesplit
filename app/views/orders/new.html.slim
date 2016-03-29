@@ -8,16 +8,16 @@
   /  = f.input :something, input_html: {class: 'form-control'}
 
   .font
-    = form_for :new_order, url: orders_path do |f|
+    = form_for @order_all, url: orders_path do |f|
       = f.label "Delivery Time"
       = f.date_field :delivery_time
-      = f.label "Quantity"
-      = f.number_field :quantity
-      = f.label "Select Items"
+      br
+      = f.label "Select Items:"
 
-      - @items.each do |item|
-        dl
-          = check_box_tag "new_order[item][#{item.id}]", item.id
-          dd = item.name
+	  = f.fields_for :orders do |order|
+        ul
+		  li
+			= Item.find(order.object.item_id).name + ' x '
+		    = order.number_field :quantity
       = f.submit "Submit", class: 'button2 button2hover'
 

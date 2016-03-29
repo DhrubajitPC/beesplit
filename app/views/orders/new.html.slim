@@ -18,6 +18,7 @@
         ul
 		  li
 			= Item.find(order.object.item_id).name + ' x '
+			= order.hidden_field :item_id, :value => order.object.item_id
 		    = order.number_field :quantity
       = f.submit "Submit", class: 'button2 button2hover'
 

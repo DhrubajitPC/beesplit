@@ -13,25 +13,18 @@ class OrdersController < ApplicationController
 		#@test = params[:new_order_all][:orders_attributes]
 		#flash[:notice] = @test.to_str()
     @order_all = OrderAll.new(order_all_params)
-		@orders = Array.new()
+		puts params[:order_all][:orders_attributes]["0"][:quantity]
 		params[:order_all][:orders_attributes].each do |order|
-			puts 'DEBUGGING'
-			puts order
-			puts 'DEBUGGING'
-			puts order.item_id
-			puts order.quantity
-			puts 'END DEBUGGING'
-			if order[2] > ""
-				if order[:quantity].to_i() > 0
-					@orders.push(order)
-				end
+			if order[1][:quantity].to_i() <= 0
+				@order_all.orders[order[0].to_i()].destroy #delete record to prevent redundant rows
 			end
 		end
+		
     if @order_all.save
-      flash[:notice] = "Added new order"
+      flash[:notice] = "added new order"
       redirect_to root_path
     else
-      flash[:notice] = "Creating new order failed"
+      flash[:notice] = "creating new order failed"
       render :new
     end
   end

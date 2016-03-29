@@ -49,6 +49,7 @@ end
 8.times do
   OrderAll.create!(
 		bee_id: rand(1..4),
+		address: Faker::Address.street_address,
 		delivery_time: Faker::Time.forward(2, :morning)
 	)
 end

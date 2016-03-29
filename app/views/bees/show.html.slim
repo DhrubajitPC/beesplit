@@ -1,6 +1,6 @@
-.container
-  .row
+.row.top-row
     h1 = "#{@bee.name}'s Orders"
+.container
   .table
     .tablefont
       table.table.table-striped
@@ -8,12 +8,14 @@
 		  tr
 			th Order Id
 			th Delivery Date
+			th Delivery Address
 			th Details
 		tbody
 		  - @bee.order_alls.each do |order_all|
 			tr
 			  td = order_all.id
 			  td = order_all.delivery_time
+			  td = order_all.address
 			  td
 				  table.table.table-striped
 					thead

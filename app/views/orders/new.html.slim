@@ -1,6 +1,6 @@
-.container
-  .row
+.row.top-row
     h1 Order Form
+.container
 
   /= simple_form_for :something, :url => new_order_path do |f|
   /  = f.input :delivery_time, input_html: {class: 'form-control'}
@@ -9,10 +9,10 @@
 
   .font
     = form_for @order_all, url: orders_path do |f|
-      = f.label "Delivery Time"
+      = f.label "Delivery Time: "
       = f.date_field :delivery_time
       br
-      = f.label "Select Items:"
+      = f.label "Select Items: "
 
 	  = f.fields_for :orders do |order|
         ul

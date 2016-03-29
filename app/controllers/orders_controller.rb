@@ -21,10 +21,10 @@ class OrdersController < ApplicationController
 		end
 		
     if @order_all.save
-      flash[:notice] = "added new order"
+      flash[:notice] = "Sucessfully Added New Order!"
       redirect_to root_path
     else
-      flash[:notice] = "creating new order failed"
+      flash[:notice] = "Failure in Creating New Order!"
       render :new
     end
   end

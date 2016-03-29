@@ -23,20 +23,21 @@ body{
 	border: 0;
   	background-color:#EFD908;
   	background-size:cover;
-	padding-top: 3.25em;
 }
 
-.row {
+.container{
+	padding: 5px 0px;
+}
+
+.top-row {
 	background-color: #000000;
-	cursor: default;
 	height: 4em;
 	line-height: 3.25em;
-	position: fixed;
 	text-align: left;
 	top: 0;
 	width: 100%;
-	z-index:10001;
-	width: 100%;
+	margin: 0px;
+	padding: 0px 25px;
 }
 
 
@@ -46,7 +47,6 @@ body{
 	font-size: 2em; 
 	font-family: 'Helvetica', 'Arial', sans-serif; 
 	font-weight: bold;
-	position: absolute;
 	margin: 0.2em 0;
 	padding: 0;
 	top: 0;
@@ -62,18 +62,12 @@ body{
 	font-family: 'Helvetica', 'Arial', sans-serif; 
 	font-size: 1em; 
 	font-weight: bold;
-	position: relative;
 	margin: 0;
 	padding: 0;
 	top: 0.5em;
 	left: 8.5em;
 	height: inherit;
 	line-height: inherit;
-}
-
-.container {
-  margin: 2.5em auto;
-  width: 100%;
 }
 
 .button {
@@ -130,7 +124,14 @@ body{
 
 .tablefont{
 	font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", Verdana, sans-serif;
-	position: fixed;
 	width: 100%;
 	top: 4em
+}
+
+.flash{
+    position: fixed;
+    bottom: 0px;
+    right: 5px;
+    background-color: #ffffb3;
+    border-color: black;
 }

@@ -10,5 +10,11 @@
 
 <%= yield %>
 
+<% if not flash[:notice].blank? %>
+	<div class="well flash">
+		<%= flash[:notice] %>
+	</div>
+<% end %>
+
 </body>
 </html>

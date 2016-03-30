@@ -31,6 +31,7 @@ class OrdersController < ApplicationController
   end
 	
 	def processing #processes floating orders
+		puts 'PROCESSING...'
 		splitMain()
 	end
 

@@ -19,3 +19,6 @@
 !/log/.keep
 /tmp
 .idea
+
+#Ignore byebug logs
+/.byebug_history

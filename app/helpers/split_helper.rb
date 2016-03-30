@@ -1,12 +1,13 @@
 module SplitHelper #Contains all key split (and combine) functions
 	include ApplicationHelper
 	
-	@qLowerBound = 8 #how many items is deemed 'too little?'
-	@qNormal = 20 #how many items are there in a typical order?
-	@qHigherBound = 35 #how many items is deemed 'too much?'
-	@storeDistMax = 5 #how far (based on levenshtein_distance) is too far?
+	@@qLowerBound = 8 #how many items is deemed 'too little?'
+	@@qNormal = 20 #how many items are there in a typical order?
+	@@qHigherBound = 35 #how many items is deemed 'too much?'
+	@@storeDistMax = 5 #how far (based on levenshtein_distance) is too far?
 	
 	def splitMain
+		flash[:process] = ''
 		OrderAll.where(:bee_id => nil).each do |order_all|
 			#compute quantity and deem if it is necessary to make adjustments
 			@total_q = 0
@@ -18,12 +19,13 @@ module SplitHelper #Contains all key split (and combine) functions
 			elsif (@total_q>35)
 				split()
 			else
-				assign(order_all)
+				assign_bee(order_all)
 			end
+			puts @total_q
 		end		
 	end
 
-	def assign(order_all)
+	def assign_bee(order_all)
 		@nearby_stores = nearby_stores(order_all.address)
 	
 		@freeBees = Bee.where(status: 1, all_store_id: @nearby_stores.keys) #free
@@ -36,20 +38,36 @@ module SplitHelper #Contains all key split (and combine) functions
 			end
 		end
 		
-		order_all.bee_id = @best_bee.id
-		order_all.update
-		
-		puts @best_bee.name
-		puts @min
+		if (!@best_bee.nil?)
+			order_all.bee_id = @best_bee.id
+			order_all.save
+			@best_bee.status = 0
+			@best_bee.save
+			flash[:process] += '<li>' + order_all.id.to_s + ': Assigned bee #' + @best_bee.id.to_s + '! :)' + '</li>'
+			flash[:process] += '<li>' + order_all.id.to_s + ': Updated bee #' + @best_bee.id.to_s + '\'s status to busy! :)' + '</li>'
+			
+			puts @best_bee.name
+			puts @min
+		else
+			flash[:process] += '<li>' + order_all.id.to_s + ': Unable to find a bee to take the order :(' + '</li>'
+		end
+	end
+	
+	def combine()
+		puts 'COMBINING'
+	end
+	
+	def split()
+		puts 'SPLITTIN'
 	end
 	
 	def nearby_stores(delivery_address)
 		@stores = {}
 		AllStore.all.each do |all_store|
 			@dist = levenshtein_distance(all_store.address, delivery_address)
-			if (@dist <= @storeDistMax)
+			if (@dist <= @@storeDistMax)
 				@stores[all_store.id] = @dist
-				puts all_store.name
+				puts all_store.address
 			end
 		end
 		return @stores

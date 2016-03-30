@@ -4,6 +4,8 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
   root 'home#index'
+	#processes floating orders
+	get 'process' => 'orders#processing'
   resources :bees, only: [:show,:index]
   resources :orders, only: [:new, :create]
   resources :order_all, only: [:new, :create]

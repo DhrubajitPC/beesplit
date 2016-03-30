@@ -12,7 +12,7 @@
   )
 end
 
-4.times do
+8.times do
   Bee.create!(
       name: Faker::Name.name,
       contact: Faker::PhoneNumber.cell_phone,
@@ -46,7 +46,7 @@ end
   )
 end
 
-8.times do
+6.times do
   OrderAll.create!(
 		bee_id: rand(1..4),
 		address: Faker::Address.street_address,

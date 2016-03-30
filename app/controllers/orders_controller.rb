@@ -21,6 +21,17 @@ class OrdersController < ApplicationController
 			end
 		end
 		
+		
+    if @order_all.save
+      flash[:notice] = "Sucessfully Added New Order!"
+      redirect_to root_path
+    else
+      flash[:notice] = "Failure in Creating New Order!"
+      render :new
+    end
+  end
+	
+	def processing #processes floating orders
 		@freeBees = Bee.where(status: 1) #free
 		@min = 99999
 		@best_bee = nil
@@ -37,15 +48,7 @@ class OrdersController < ApplicationController
 		
 		puts @best_bee.name
 		puts @min
-		
-    if @order_all.save
-      flash[:notice] = "Sucessfully Added New Order!"
-      redirect_to root_path
-    else
-      flash[:notice] = "Failure in Creating New Order!"
-      render :new
-    end
-  end
+	end
 
   private
 

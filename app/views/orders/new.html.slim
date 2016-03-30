@@ -10,7 +10,7 @@
   .font
     = form_for @order_all, url: orders_path do |f|
       = f.label "Delivery Time: "
-      = f.date_field :delivery_time
+      = f.datetime_local_field :delivery_time, :value => DateTime.now.strftime("%Y-%m-%dT%H:00:00")
 	  br
 	  = f.label "Delivery Address: "
 	  = f.text_field :address

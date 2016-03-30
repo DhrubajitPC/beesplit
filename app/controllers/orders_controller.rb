@@ -1,5 +1,5 @@
 class OrdersController < ApplicationController
-	include ApplicationHelper
+	include SplitHelper
 
   def new
     @order_all = OrderAll.new
@@ -21,7 +21,6 @@ class OrdersController < ApplicationController
 			end
 		end
 		
-		
     if @order_all.save
       flash[:notice] = "Sucessfully Added New Order!"
       redirect_to root_path
@@ -32,22 +31,7 @@ class OrdersController < ApplicationController
   end
 	
 	def processing #processes floating orders
-		@freeBees = Bee.where(status: 1) #free
-		@min = 99999
-		@best_bee = nil
-		@freeBees.each do |bee|
-			@store = AllStore.find(bee.all_store_id)
-			@dist = levenshtein_distance(@store.address, @order_all.address)
-			if (@dist < @min)
-				@min = @dist
-				@best_bee = bee
-			end
-		end
-		
-		@order_all.bee_id = @best_bee.id
-		
-		puts @best_bee.name
-		puts @min
+		splitMain()
 	end
 
   private

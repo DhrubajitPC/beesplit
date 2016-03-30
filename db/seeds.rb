@@ -17,7 +17,7 @@ end
       name: Faker::Name.name,
       contact: Faker::PhoneNumber.cell_phone,
       email: Faker::Internet.email,
-      status: rand(0..2),
+      status: rand(1..2),
       all_store_id: rand(1..2)
   )
 end
@@ -42,13 +42,13 @@ end
   Order.create!(
     quantity: rand(1..9),
     item_id: rand(1..10),
-    order_all_id: rand(1..8)
+    order_all_id: rand(1..6)
   )
 end
 
 6.times do
   OrderAll.create!(
-		bee_id: rand(1..4),
+		bee_id: rand(1..8),
 		address: Faker::Address.street_address,
 		delivery_time: Faker::Time.forward(2, :morning)
 	)

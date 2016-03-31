@@ -1,0 +1,16 @@
+.row.top-row
+  H1 List of all the stores
+
+.container
+  .table
+    .tablefont
+      table.table.table-striped
+        thead
+          tr
+            th Store Id
+            th Store Address
+        tbody
+          - AllStore.all.each do |row|
+            tr
+              td = link_to row.store_id, store_path(row.store_id)
+              td = row.address

@@ -1,0 +1,19 @@
+.row.top-row
+  h1 = "Store #{@store.id}"
+
+.container
+  .table
+    .tablefont
+      table.table.table-striped
+        thead
+          tr
+            th Item Id
+            th Item Name
+            th Stock
+        tbody
+          - Store.all.each do |entry|
+            tr
+              td = entry.item_id
+              td = Item.find(entry.item_id).name
+              td = entry.stock
+

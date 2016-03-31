@@ -18,7 +18,7 @@ end
       contact: Faker::PhoneNumber.cell_phone,
       email: Faker::Internet.email,
       status: rand(1..2),
-      all_store_id: rand(1..2)
+      all_store_id: rand(1..3)
   )
 end
 
@@ -30,12 +30,14 @@ end
   )
 end
 
-4.times do
-  Store.create!(
-    item_id: rand(1..9),
-    all_store_id: rand(1..2),
-    stock: rand(1..50)
-  )
+for i in 1..3
+	for j in 1..10
+		Store.create!(
+			item_id: j,
+			all_store_id: i,
+			stock: rand(0..20)
+		)
+	end
 end
 
 22.times do

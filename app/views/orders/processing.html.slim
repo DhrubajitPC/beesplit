@@ -1,5 +1,81 @@
 .row.top-row
-  h1 PROCESSING
-well
-  ul
-	== flash[:process]
+    .col-sm-6
+      h1 beesplit
+      h2 Ensuring fair split on your bee's workloads :)
+    .col-sm-6
+      .text-right
+        = link_to "Back to Home", root_path, class:'button button1'
+.container
+	well
+	  ul
+		== flash[:process]
+	h2 Processed Orders
+	.table
+	  .tablefont
+		table.table.table-striped
+		  thead
+			tr
+			  th Order_All Id
+			  th Delivery Time
+			  th Address
+			  th Bee Assigned
+			  th Details
+		  tbody
+			- @order_alls_processed.each do |row|
+			  tr
+				td = row.id
+				td = row.delivery_time
+				td = row.address
+				td = link_to Bee.find(row.bee_id).name, Bee.find(row.bee_id)
+				td
+				  table.table.table-striped
+					thead
+					  tr
+						th Order Line Id
+						th Item
+						th Price
+						th Quantity
+						th Category
+					tbody
+					  - row.orders.each do |order|
+						tr
+
+						  td = order.id
+						  td = order.item.name
+						  td = order.item.price
+						  td = order.quantity
+						  td = order.item.category
+	h2 Pending Orders
+	.table
+	  .tablefont
+		table.table.table-striped
+		  thead
+			tr
+			  th Order_All Id
+			  th Delivery Time
+			  th Address
+			  th Details
+		  tbody
+			- @order_alls_unprocessed.each do |row|
+			  tr
+				td = row.id
+				td = row.delivery_time
+				td = row.address
+				td
+				  table.table.table-striped
+					thead
+					  tr
+						th Order Line Id
+						th Item
+						th Price
+						th Quantity
+						th Category
+					tbody
+					  - row.orders.each do |order|
+						tr
+
+						  td = order.id
+						  td = order.item.name
+						  td = order.item.price
+						  td = order.quantity
+						  td = order.item.category

@@ -21,4 +21,4 @@
 .idea
 
 #Ignore byebug logs
-/.byebug_history
+.byebug_history

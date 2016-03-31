@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   resources :bees, only: [:show,:index]
   resources :orders, only: [:new, :create]
   resources :order_all, only: [:new, :create]
+  resources :all_store, only: [:index]
+  resources :store, only: [:show]
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

@@ -24,4 +24,5 @@
 			= order.hidden_field :item_id, :value => order.object.item_id
 		    = order.number_field :quantity
       = f.submit "Submit", class: 'button2 button2hover'
+	  = link_to "Cancel", root_path, class: 'button2 button2hover'
 

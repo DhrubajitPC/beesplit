@@ -12,5 +12,6 @@
         tbody
           - AllStore.all.each do |row|
             tr
-              td = link_to row.store_id, store_path(row.store_id)
+              td = link_to row.id, store_path(row.id)
               td = row.address
+  button = link_to "Home", root_path

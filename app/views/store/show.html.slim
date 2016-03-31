@@ -1,5 +1,5 @@
 .row.top-row
-  h1 = "Store #{@store.id}"
+  h1 = @store.address
 
 .container
   .table
@@ -11,9 +11,10 @@
             th Item Name
             th Stock
         tbody
-          - Store.all.each do |entry|
+          - Store.where(:all_store_id => @store.id).each do |entry|
             tr
               td = entry.item_id
               td = Item.find(entry.item_id).name
               td = entry.stock
 
+  button = link_to "Home", root_path

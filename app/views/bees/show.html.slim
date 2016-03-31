@@ -1,5 +1,7 @@
 .row.top-row
-    h1 = "#{@bee.name}'s Orders"
+    h1 = "#{@bee.name}'s Orders (Store:"
+	h1 = link_to AllStore.find(@bee.all_store_id).address, store_path(@bee.all_store_id)
+	h1 =  ")"
 .container
   .table
     .tablefont

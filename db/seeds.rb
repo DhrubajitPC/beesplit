@@ -37,8 +37,7 @@ end
 
 3.times do
   AllStore.create!(
-    address: Faker::Address.street_address,
-    store_id: rand(1..4)
+    address: Faker::Address.street_address
   )
 end
 

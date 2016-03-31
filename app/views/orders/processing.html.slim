@@ -2,9 +2,6 @@
     .col-sm-6
       h1 beesplit
       h2 Ensuring fair split on your bee's workloads :)
-    .col-sm-6
-      .text-right
-        = link_to "Back to Home", root_path, class:'button button1'
 .container
 	well
 	  ul
@@ -79,3 +76,4 @@
 						  td = order.item.price
 						  td = order.quantity
 						  td = order.item.category
+	button = link_to "Home", root_path

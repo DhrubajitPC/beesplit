@@ -19,7 +19,7 @@
             tr
               td = link_to row.name, row
               td = row.status
-              td = link_to AllStore.find(row.all_store_id).address, store_path(AllStore.find(row.all_store_id).store_id)
+              td = link_to AllStore.find(row.all_store_id).address, store_path(AllStore.find(row.all_store_id).id)
   = link_to "Stores", all_store_index_path, class:'button button1'
   = link_to "PROCESS PENDING ORDERS", process_path, class:'button button1'
 

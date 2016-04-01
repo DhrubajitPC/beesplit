@@ -23,6 +23,49 @@ Things you may want to cover:
 
 * ...
 
+=== User Guide
+This demo application is meant to show a simple order assigning workflow for Honestbee.
+
+From the home page, you can submit new orders, simulating honestbee's clients placing order during real time.
+The process button then acts to simulate honestbee's periodic (or event-based) trigger to process all unassigned orders (within the next 3 hours) to free Bees (not busy or unavailable ones).
+
+After the order is assigned, you can resolve the order by going into the bees' details page and clicking the resolve button. This will simulate what happens when the bee checks out from the counter.
+That is, it will update the store's item stocks accordingly and delete the order(s).
+** do note that item stocks can reach negative levels. This is not resolved because this is not the main focus of the app.
+
+=== Logic for assigning orders
+The idea of this demo is not only to assign orders efficiently, but also to ensure that the bees get a fair workload.
+As such, small orders will be combined while large orders will be split.
+
+==== Assigning Orders to Bees
+* Orders are assigned to Bees stationed at a nearby Store (there is a distance limit)
+* Orders are assigned to Bees only if the Store's stocks fulfills every single item in the order
+* Orders are placed to a random (free) Bee at the nearest Store that fulfills the second criteria
+** Distance between stores are simplified using levenshtein_distance (distance between strings) of their addresses. The three addresses used for the default seed are "8 Somapah Road" -- "2 Alexpah Road" -- "2 Alexandra Road", 2 Alexpah Road being in the middle of the three.
+
+==== Combining Orders
+* After small orders are determined, they are going to be combined with another small order (if possible).
+* To ensure a fair and optimized solution, an order from the top of the queue is picked (first come first serve)
+* It will be paired with another order that fits best according to these criteria:
+  * Every additional unique item type in the final combined order is (-2) points
+  * Every different item category in the final combined order is (-1) point
+  * Every item match between the 2 orders is (+3) points. This is necesarry to balance between orders with multiple quantities (of the same item type) vs orders with various item types.
+
+==== Splitting Orders
+* Splitting Orders will be considered when the order is large or there are not enough items in stock to proces a single normal order.
+* Splitting Orders can be very complicated, so we choose to do a relatively simple heuristic.
+* The Order will be divided (up to) n sub orders depending on the size of the order
+* We will then assign an item type to each sub order, while trying to group them based on category as much as possible.
+* At the same time, we try to ensure that each sub order's size is not too large or too small.
+* Then we will try to assign all of the sub order to the Stores. Either all of them are successfully assigned, or the operation will fail.
+* If it fails, we will try to assign the sub orders in different permutations to fit the stocks left in Stores.
+
+
+=== Contributors
+Dhrubajit
+Luccan
+Bryan
+
 
 Please feel free to use a different markup language if you do not plan to run
 <tt>rake doc:app</tt>.

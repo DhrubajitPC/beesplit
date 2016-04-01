@@ -1,27 +1,17 @@
-== README
+===Setting up
+This demo application is built on Ruby on Rails. Ruby version is 2.2.3p173 and Rails version is 4.2.4.
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+To set up the app, clone the repo and cd into it. Run the following commands:
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+```
+gem install bundler
+bundle install
+rake db:create
+rake db:migrate
+rake db:seed
+```
+To run the server run the command:
+```rails s```
 
 === User Guide
 This demo application is meant to show a simple order assigning workflow for Honestbee.

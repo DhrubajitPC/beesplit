@@ -60,13 +60,17 @@ As such, small orders will be combined while large orders will be split.
 * Then we will try to assign all of the sub order to the Stores. Either all of them are successfully assigned, or the operation will fail.
 * If it fails, we will try to assign the sub orders in different permutations to fit the stocks left in Stores.
 
+=== Developent
+Our group developed this application quite late, since we think that we can go directly into the heart of the matter.
+As we discussed how to start, we realized that we need some sort of scaffolding so the user can see our implementation.
+While weighing each factor individually seems easy at first glance, bringing them together and fulfilling all the criteria with our order assignment was also more complicated than we initially thought.
+As such, we try as much as possible to make our functions specific and easily modifiable.
+This project was a good learning experience for all of us.
 
 === Contributors
-Dhrubajit
-
-Luccan
-
-Bryan
+- Dhrubajit
+- Luccan
+- Bryan
 
 
 Please feel free to use a different markup language if you do not plan to run

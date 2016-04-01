@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 20160326193915) do
   end
 
   create_table "order_alls", force: :cascade do |t|
+		t.integer	 "parent_id", 		limit: 4
 		t.integer  "bee_id",        limit: 4
 		t.string   "address",    		limit: 255
 		t.datetime "delivery_time"

@@ -13,6 +13,11 @@ module SplitHelper #Contains all key split (and combine) functions
 		flash[:process] = ''
 		#8.0 is to offset sg local time
 		@order_alls_tobe_processed = OrderAll.where(:bee_id => nil).where("delivery_time <= :dt", {dt: DateTime.now + (8.0+@@processNHoursAhead/24)})
+		#ignore parent orders (splitted orders)
+		@parent_oa_ids = OrderAll.select("parent_id").where.not(:parent_id=>nil).map(&:parent_id).uniq
+		puts @parent_oa_ids
+		@order_alls_tobe_processed = @order_alls_tobe_processed.where.not(:id=>@parent_oa_ids)
+		
 		@order_alls_tobe_processed.each do |order_all|
 			#compute quantity and deem if it is necessary to make adjustments
 			@total_q = 0
@@ -22,9 +27,10 @@ module SplitHelper #Contains all key split (and combine) functions
 			if (@total_q < 8)
 				@order_alls_tobe_combined.push(order_all)
 			elsif (@total_q>35)
-				@order_alls_tobe_split.push(order_all)
+				@order_alls_tobe_split.push([order_all, @total_q])
 			else
 				assign_bee(order_all, find_best_bee(order_all))
+				flash[:process] += '<br/>'
 			end
 			puts @total_q
 		end
@@ -32,12 +38,14 @@ module SplitHelper #Contains all key split (and combine) functions
 		if(!@order_alls_tobe_combined.empty?) #combine if not empty
 			combine(@order_alls_tobe_combined)
 		end
+		@successful_split_ids = []
 		if(!@order_alls_tobe_split.empty?) #split if not empty
-			split(@order_alls_tobe_split)
+			@successful_split_ids = split(@order_alls_tobe_split)
 		end
 		
-		@order_alls_unprocessed = @order_alls_tobe_processed.where(:bee_id => nil)
-		@order_alls_processed = @order_alls_tobe_processed - @order_alls_unprocessed
+		#take into account splitted order_alls
+		@order_alls_unprocessed = @order_alls_tobe_processed.where(:bee_id => nil).where.not(:bee_id => @successful_split_ids)
+		@order_alls_processed = @order_alls_tobe_processed - @order_alls_unprocessed + OrderAll.where(:parent_id => @successful_split_ids)
 	end
 
 	#returns a bee who is assigned at a store that can take the order.
@@ -46,13 +54,17 @@ module SplitHelper #Contains all key split (and combine) functions
 		find_best_bee_ns(order_all, nearby_stores(order_all.address))
 	end
 	def find_best_bee_ns(order_all, nearby_stores) #overload 2 - predetermined nearby_stores
+		@freeBees = Bee.where(status: 1, all_store_id: nearby_stores.keys) #free
+		find_best_bee_bns(order_all, nearby_stores, @freeBees)
+	end
+	def find_best_bee_bns(order_all, nearby_stores, free_bees) #overload 3 - predetermined free bees
 		@nearby_stores = nearby_stores
 		
 		if (@nearby_stores.empty?)
 			return 'You live too far from our stores :('
 		end
 		
-		@freeBees = Bee.where(status: 1, all_store_id: @nearby_stores.keys) #free
+		@freeBees = free_bees
 		@min = 99999
 		@best_bee = nil
 		@freeBees.each do |bee|
@@ -92,8 +104,24 @@ module SplitHelper #Contains all key split (and combine) functions
 			bee.status = 0
 			bee.save
 			flash[:process] += '<li>Updated bee #' + bee.id.to_s + '\'s status to busy! :)' + '</li>'
-			flash[:process] += '<br/>'
 		end
+	end
+	
+	#success is indicated by returning true
+	def assign_multiple_bees(order_all, child_oa_list, bee_list)
+		if (bee_list.length == child_oa_list.length) #success
+			flash[:process] += '<li>Splitting Order #' + order_all.id.to_s + '!' + '</li>'
+			child_oa_list.each do |child_order|
+				if (child_order[0].orders.length > 0)
+					assign_bee(child_order[0], bee_list[child_order[0]])
+				end
+			end
+			flash[:process] += '<br/>'
+			#order_all.bee_id = 0 #bee_id 0 means its assigned to child
+			#order_all.save
+			return true
+		end
+		return false
 	end
 	
 	def combine(order_all_list)
@@ -163,14 +191,95 @@ module SplitHelper #Contains all key split (and combine) functions
 			end #end loop for order_all2
 			if (@best_order_all.nil?)
 				assign_bee(order_all1, find_best_bee(order_all1)) #if nil, treat as singular order
+				flash[:process] += '<br/>'
 			else
 				assign_bee(@best_order_all, @best_order_bee)
+				flash[:process] += '<br/>'
 			end
 		end
 	end
 	
 	def split(order_all_list)
 		puts 'SPLITTIN'
+		@successful_split_ids = []
+		order_all_list.each do |order_all_arr| #this is in form of [order_all, quantity]			
+			@order_all = order_all_arr[0]
+			@n_splits = (order_all_arr[1]/@@qNormal).ceil #number of child order_alls created
+			#Sanity Check: Enough free bees?
+			@nearby_stores = nearby_stores(@order_all.address)
+			@freeBees = Bee.where(status: 1, all_store_id: @nearby_stores.keys) #free
+			if (@freeBees.length < @n_splits)
+				#skip
+				assign_bee(@order_all, 'Your order is so large we don\'t have enough free bees atm D:')
+				flash[:process] += '<br/>'
+				next
+			end
+			
+			@child_orders = []
+			for i in 1..@n_splits
+				#[child order_all to be saved, categories, quantity]
+				@child_orders.push([OrderAll.new, [], 0])
+				@child_orders[i-1][0].parent_id = @order_all.id
+				@child_orders[i-1][0].address = @order_all.address
+				@child_orders[i-1][0].delivery_time = @order_all.delivery_time
+			end
+			#Initial: Split orders by Category
+			@order_all.orders.each do |order|
+				@newcat = Item.find(order.item_id).category
+				@done = false
+				@child_orders.each do |child_order|
+					if (child_order[1].include? @newcat and !@done and child_order[2]<@@qHigherBound)
+						child_order[0].orders.build(:item_id => order.item_id, :quantity => order.quantity)
+						child_order[1].push(@newcat)
+						child_order[2] += order.quantity
+						@done = true
+					end
+				end
+				if (!@done)
+					@co_counter = 0 #new category goes into child order_all with least quantity
+					@min = @child_orders[0][2]
+					for z in 1..@n_splits-1
+						if (@child_orders[z][2]<@min)
+							@co_counter = z
+							@min = @child_orders[z][2]
+						end
+					end
+					@child_orders[@co_counter][0].orders.build(:item_id => order.item_id, :quantity => order.quantity)
+					@child_orders[@co_counter][1].push(@newcat)
+					@child_orders[@co_counter][2] += order.quantity
+				end
+			end
+			#Store Sanity Check: Stock vs Order Quantity per child order issues
+			@bee_list = {}
+			@ns = @nearby_stores.clone #clone
+			@fb = @freeBees - Bee.where(:id => -1)
+			puts '----------'
+			@child_orders.each do |child_order|
+				puts child_order[0].orders
+				if (child_order[0].orders.length <= 0)
+					@bee_list[child_order[0]] = 'Nobody' #empty child_order
+					next
+				end
+				@bee = find_best_bee_bns(child_order[0], @ns, @fb)
+				if (@bee.instance_of? String) #cannot find bee to be assigned
+					@bee_list = {}
+					break
+				else
+					@fb = @fb - Bee.where(:id => @bee.id)
+					@bee_list[child_order[0]] = @bee
+				end
+			end
+			if assign_multiple_bees(@order_all, @child_orders, @bee_list)
+				@successful_split_ids.push(@order_all.id)
+				next
+			end
+			
+			#if not successful, we have to split the order lines...
+			
+			assign_bee(@order_all, 'I give up processing your order... :\'(')
+			flash[:process] += '<br/>'
+		end
+		return @successful_split_ids
 	end
 	
 	def nearby_stores(delivery_address)

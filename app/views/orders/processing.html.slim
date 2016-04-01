@@ -23,7 +23,10 @@
 				td = row.id
 				td = row.delivery_time
 				td = row.address
-				td = link_to Bee.find(row.bee_id).name, Bee.find(row.bee_id)
+				- if row.bee_id.nil?
+				  td = "-Splitted-"
+				- else
+				  td = link_to Bee.find(row.bee_id).name, Bee.find(row.bee_id)
 				td
 				  table.table.table-striped
 					thead

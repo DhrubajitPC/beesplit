@@ -63,7 +63,9 @@ As such, small orders will be combined while large orders will be split.
 
 === Contributors
 Dhrubajit
+
 Luccan
+
 Bryan
 
 

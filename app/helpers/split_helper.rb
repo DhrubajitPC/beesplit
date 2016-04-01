@@ -31,6 +31,9 @@ module SplitHelper #Contains all key split (and combine) functions
 			else
 				assign_bee(order_all, find_best_bee(order_all))
 				flash[:process] += '<br/>'
+				if (order_all.bee_id.nil?) #if fail to assign, consider splitting
+					@order_alls_tobe_split.push([order_all, @total_q])
+				end
 			end
 			puts @total_q
 		end

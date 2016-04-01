@@ -1,4 +1,7 @@
-===Setting up
+== Beesplit
+This demo application is meant to show a simple order assigning workflow for Honestbee.
+
+=== Setting up
 This demo application is built on Ruby on Rails. Ruby version is 2.2.3p173 and Rails version is 4.2.4.
 You also need to have a mySQL instance installed in your machine.
 
@@ -18,7 +21,6 @@ To run the server run the command:
 * rails s
 
 === User Guide
-This demo application is meant to show a simple order assigning workflow for Honestbee.
 
 From the home page, you can submit new orders, simulating honestbee's clients placing order during real time.
 The process button then acts to simulate honestbee's periodic (or event-based) trigger to process all unassigned orders (within the next 3 hours) to free Bees (not busy or unavailable ones).
@@ -61,11 +63,8 @@ While weighing each factor individually seems easy at first glance, bringing the
 As such, we try as much as possible to make our functions specific and easily modifiable.
 This project was a good learning experience for all of us.
 
-=== Contributors
+=== Group Members
 - Dhrubajit
 - Luccan
 - Bryan
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+- Ann

@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   root 'home#index'
 	#processes floating orders
 	get 'process' => 'orders#processing'
+	get 'resolve/:id' => 'bees#resolve'
   resources :bees, only: [:show,:index]
   resources :orders, only: [:new, :create]
   resources :order_all, only: [:new, :create]

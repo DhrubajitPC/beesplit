@@ -37,3 +37,5 @@
 						  td = order.item.price
 						  td = order.quantity
 						  td = order.item.category
+  - if (@bee.status == "busy")
+	button = link_to "Resolve Orders", {:controller => "bees", :action => "resolve", :id => @bee.id }

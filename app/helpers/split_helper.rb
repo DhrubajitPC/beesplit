@@ -4,7 +4,7 @@ module SplitHelper #Contains all key split (and combine) functions
 	@@qLowerBound = 8 #how many items is deemed 'too little?'
 	@@qNormal = 20 #how many items are there in a typical order?
 	@@qHigherBound = 35 #how many items is deemed 'too much?'
-	@@storeDistMax = 5 #how far (based on levenshtein_distance) is too far?
+	@@storeDistMax = 6 #how far (based on levenshtein_distance) is too far?
 	@@processNHoursAhead = 3.0 #how many hours from now would you like to process orders
 	
 	def splitMain
@@ -44,7 +44,8 @@ module SplitHelper #Contains all key split (and combine) functions
 		end
 		
 		#take into account splitted order_alls
-		@order_alls_unprocessed = @order_alls_tobe_processed.where(:bee_id => nil).where.not(:bee_id => @successful_split_ids)
+		puts @successful_split_ids
+		@order_alls_unprocessed = @order_alls_tobe_processed.where(:bee_id => nil).where.not(:id => @successful_split_ids)
 		@order_alls_processed = @order_alls_tobe_processed - @order_alls_unprocessed + OrderAll.where(:parent_id => @successful_split_ids)
 	end
 
@@ -253,26 +254,60 @@ module SplitHelper #Contains all key split (and combine) functions
 			@bee_list = {}
 			@ns = @nearby_stores.clone #clone
 			@fb = @freeBees - Bee.where(:id => -1)
+			
 			puts '----------'
-			@child_orders.each do |child_order|
-				puts child_order[0].orders
-				if (child_order[0].orders.length <= 0)
-					@bee_list[child_order[0]] = 'Nobody' #empty child_order
-					next
-				end
-				@bee = find_best_bee_bns(child_order[0], @ns, @fb)
-				if (@bee.instance_of? String) #cannot find bee to be assigned
-					@bee_list = {}
+			@a = (0..@child_orders.length-1).to_a
+			@a_permutations = @a.permutation.to_a
+			@success = false
+			@a_permutations.each do |_a| #try all splitting permutation to find answer
+				puts '----------'
+				_a.each do |i|
+					puts i
+					@child_order = @child_orders[i]
+					puts @child_order[0].orders
+					if (@child_order[0].orders.length <= 0)
+						@bee_list[@child_order[0]] = 'Nobody' #empty child_order
+						next
+					end
+					@bee = find_best_bee_bns(@child_order[0], @ns, @fb)
+					if (@bee.instance_of? String) #cannot find bee to be assigned
+						@bee_list = {}
+						break
+					else
+						@fb = @fb - Bee.where(:id => @bee.id) #remove bee from pool
+						@bee_list[@child_order[0]] = @bee
+					end
+				end #_a.each do |i|
+				
+				if assign_multiple_bees(@order_all, @child_orders, @bee_list)
+					@successful_split_ids.push(@order_all.id)
+					@success = true
 					break
-				else
-					@fb = @fb - Bee.where(:id => @bee.id)
-					@bee_list[child_order[0]] = @bee
 				end
 			end
-			if assign_multiple_bees(@order_all, @child_orders, @bee_list)
-				@successful_split_ids.push(@order_all.id)
+			
+			if (@success) #skip
 				next
 			end
+			# @child_orders.each do |child_order|
+				# puts child_order[0].orders
+				# if (child_order[0].orders.length <= 0)
+					# @bee_list[child_order[0]] = 'Nobody' #empty child_order
+					# next
+				# end
+				# @bee = find_best_bee_bns(child_order[0], @ns, @fb)
+				# if (@bee.instance_of? String) #cannot find bee to be assigned
+					# @bee_list = {}
+					# break
+				# else
+					# @fb = @fb - Bee.where(:id => @bee.id) #remove bee from pool
+					# @bee_list[child_order[0]] = @bee
+				# end
+			# end
+			# if assign_multiple_bees(@order_all, @child_orders, @bee_list)
+				# @successful_split_ids.push(@order_all.id)
+				# next
+			# end
 			
 			#if not successful, we have to split the order lines...
 			

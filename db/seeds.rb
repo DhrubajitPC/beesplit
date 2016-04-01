@@ -35,11 +35,15 @@ for i in 1..3
 	end
 end
 
-3.times do
-  AllStore.create!(
-    address: rand(1..999).to_s + " Somapah Road"
-  )
-end
+AllStore.create!(
+	address: "8 Somapah Road"
+)
+AllStore.create!(
+	address: "2 Alexpah Road"
+)
+AllStore.create!(
+	address: "2 Alexandra Road"
+)
 
 # 22.times do
   # Order.create!(

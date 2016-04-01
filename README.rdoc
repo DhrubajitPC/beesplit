@@ -5,9 +5,13 @@ To set up the app, clone the repo and cd into it. Run the following commands:
 
 * gem install bundler
 * bundle install
+* Open config/database.yml
+ * Change all instances of username/password to your sql root credentials
+ * Default is [ username: root, password: <nothing> ]
 * rake db:create
 * rake db:migrate
 * rake db:seed
+** if it does not work, try rake db:reset
 
 To run the server run the command:
 * rails s

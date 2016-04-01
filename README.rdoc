@@ -3,7 +3,6 @@ This demo application is built on Ruby on Rails. Ruby version is 2.2.3p173 and R
 
 To set up the app, clone the repo and cd into it. Run the following commands:
 
-
 gem install bundler
 bundle install
 rake db:create
